@@ -15,7 +15,7 @@ En esta aplicación podremos insertar, actualizar, eliminar y visualizar a los a
   
     4.3. Alumnos y equipos asociados: mostrará los alumnos y sus equipos (nombre del alumno, su grupo, nombre del equipo y su número de serie).
   
-    4.4. Alumnos por equipos: veremos qué alumnos usan qué equipos, es decir varios alumnos pueden usar el mismo equipo.
+    4.4. Alumnos por equipos: veremos qué alumnos usan qué equipos, es decir, varios alumnos pueden usar el mismo equipo.
   
     4.5. Alumnos sin equipos: muestra el nombre de los alumnos que no tienen equipos asociados.
   
