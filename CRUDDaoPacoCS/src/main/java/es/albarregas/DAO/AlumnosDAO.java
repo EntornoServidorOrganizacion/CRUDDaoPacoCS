@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 
 /**
@@ -23,7 +24,7 @@ public class AlumnosDAO implements IAlumnosDAO {
     public ArrayList<Alumno> leerAlumnos() {
         ArrayList<Alumno> lista = new ArrayList();
         String consulta = "Select * from alumnos;";
-        
+
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -50,7 +51,7 @@ public class AlumnosDAO implements IAlumnosDAO {
     public ArrayList<Alumno> leerAlumnosSinEquipo() {
         ArrayList<Alumno> lista = new ArrayList();
         String consulta = "select nombre, grupo from alumnos where idEquipo is null;";
-        
+
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -76,7 +77,7 @@ public class AlumnosDAO implements IAlumnosDAO {
     public ArrayList<Alumno> leerAlumnosYEquipoAsociado() {
         ArrayList<Alumno> lista = new ArrayList();
         String consulta = "Select a.nombre, a.grupo, e.marca, e.idEquipo from alumnos as a inner join equipos as e using(idEquipo);";
-        
+
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -101,40 +102,40 @@ public class AlumnosDAO implements IAlumnosDAO {
     @Override
     public void insertarAlumno(Alumno alumno) {
         String consulta = "insert into alumnos (nombre, grupo, idEquipo) values (?,?,?)";
-        
+
         try {
-            //Statement sentencia = ConnectionFactory.getConnection().createStatement();
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            
-            
+
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
+
             sentencia.setString(1, alumno.getNombre());
             sentencia.setString(2, alumno.getGrupo());
             sentencia.setInt(3, alumno.getEquipo().getIdEquipo());
-            
-            sentencia.executeQuery(consulta);
-            
+
+            sentencia.executeUpdate();
+
             sentencia.close();
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
+
     }
 
     @Override
     public void actualizarAlumno(Alumno alumno) {
         String consulta = "uptade alumnos set nombre=?, grupo=?, idEquipo=? where idAlumno=?";
-        
+
         try {
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
-            
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
+
             sentencia.setString(1, alumno.getNombre());
             sentencia.setString(2, alumno.getGrupo());
-            sentencia.setObject(3, alumno.getEquipo());
-            
-            resultado.close();
-            
+            sentencia.setInt(3, alumno.getEquipo().getIdEquipo());
+
+            sentencia.executeUpdate();
+
+            sentencia.close();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -143,15 +144,18 @@ public class AlumnosDAO implements IAlumnosDAO {
     @Override
     public void eliminarAlumnos(Alumno alumno) {
         String consulta = "delete from alumnos where idAlumno=?";
-        
+
         try {
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
-            
-            sentencia.setInt(1, alumno.getIdAlumno());
-            
-            resultado.close();
-            
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
+
+            sentencia.setString(1, alumno.getNombre());
+            sentencia.setString(2, alumno.getGrupo());
+            sentencia.setInt(3, alumno.getEquipo().getIdEquipo());
+
+            sentencia.executeUpdate();
+
+            sentencia.close();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -159,14 +163,33 @@ public class AlumnosDAO implements IAlumnosDAO {
 
     @Override
     public Alumno getAlumno(int idAlumno) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Alumno alumno = new Alumno();
+        String consulta = "Select * from alumnos where idAlumno=?;";
+
+        try {
+            Statement sentencia = ConnectionFactory.getConnection().createStatement();
+            ResultSet resultado = sentencia.executeQuery(consulta);
+
+            while (resultado.next()) {
+
+                alumno.setIdAlumno(resultado.getInt("idAlumno"));
+                alumno.setNombre(resultado.getString("nombre"));
+                alumno.setGrupo(resultado.getString("grupo"));
+            }
+
+            resultado.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error al ejecutar la sentecnia");
+            ex.printStackTrace();
+        }
+
+        return alumno;
     }
 
     @Override
     public void closeConnection() {
-          ConnectionFactory.closeConexion();
+        ConnectionFactory.closeConexion();
     }
-
-    
 
 }

@@ -90,14 +90,13 @@ public class EquiposDAO implements IEquiposDAO{
         String consulta = "insert into equipos (marca, numSerie) values (?,?)";
         
         try {
-            //Statement sentencia = ConnectionFactory.getConnection().createStatement();
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
             
             sentencia.setString(1, equipo.getMarca());
             sentencia.setString(2, equipo.getNumSerie());
             
-            resultado.close();
+            sentencia.executeUpdate();
+            sentencia.close();
             
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -109,13 +108,13 @@ public class EquiposDAO implements IEquiposDAO{
         String consulta = "uptade equipos set marca=?, numSerie=? where idEquipo=?";
         
         try {
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
             
             sentencia.setString(1, equipo.getMarca());
             sentencia.setString(2, equipo.getNumSerie());
             
-            resultado.close();
+            sentencia.executeUpdate();
+            sentencia.close();
             
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -127,12 +126,12 @@ public class EquiposDAO implements IEquiposDAO{
          String consulta = "delete from equipos where idEquipo=?";
         
         try {
-            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
-            ResultSet resultado = sentencia.executeQuery(consulta);
+            PreparedStatement sentencia = ConnectionFactory.getConnection().prepareStatement(consulta);
             
             sentencia.setInt(1, equipo.getIdEquipo());
             
-            resultado.close();
+            sentencia.executeUpdate();
+            sentencia.close();
             
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -141,7 +140,28 @@ public class EquiposDAO implements IEquiposDAO{
 
     @Override
     public Equipo getEquipo(int idEquipo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Equipo equipo = new Equipo();
+         String consulta = "Select * from equipos where idEquipo=?;";
+         
+        try {
+            Statement sentencia = ConnectionFactory.getConnection().createStatement();
+            ResultSet resultado = sentencia.executeQuery(consulta);
+
+            while (resultado.next()) {
+               
+                equipo.setIdEquipo(resultado.getInt("idEquipo"));
+                equipo.setMarca(resultado.getString("marca"));
+                equipo.setNumSerie(resultado.getString("numSerie"));
+            }
+
+            resultado.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error al ejecutar la sentecnia");
+            ex.printStackTrace();
+        }
+
+        return equipo;
     }
 
     @Override

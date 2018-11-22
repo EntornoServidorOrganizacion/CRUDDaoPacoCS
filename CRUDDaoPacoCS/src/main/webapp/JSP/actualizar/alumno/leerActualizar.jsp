@@ -12,6 +12,16 @@
         <title>Actualizar</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <form action="Realizar" method="post">
+            <h1>Alumnos: </h1>
+            <c:forEach var="alumno" items="${alumnos}">
+                <input type="radio" value="${alumno.idAlumno}" name="alumnosActualizar"><label id="listadoActualizar">${alumno.nombre}</label>
+                <br>
+            </c:forEach>
+            <br><br>
+
+            <button type="submit" value="cancelar" name="operacion">Cancelar</button>
+            <button id="actualizar" type="submit" value="aceptarActualizar" name="operacion">Actualizar</button>
+        </form>
     </body>
 </html>

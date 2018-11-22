@@ -16,11 +16,11 @@
             <table>
                 <tr>
                     <td><label>Nombre: </label></td>
-                    <td><input type="text" value="nombreAlum" name="nombreAlum" maxlength="50"/></td>
+                    <td><input type="text" value="" name="nombreAlum" maxlength="50"/></td>
                 </tr>
                 <tr>
                     <td><label>Grupo: </label></td>
-                    <td><input type="text" value="grupoAlum" name="grupoAlum" maxlength="5"/></td>
+                    <td><input type="text" value="" name="grupoAlum" maxlength="5"/></td>
                 </tr>
                 <tr>
                     <td><label>id Equipo: </label></td>

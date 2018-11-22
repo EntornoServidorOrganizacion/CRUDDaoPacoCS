@@ -51,32 +51,34 @@ public class Realizar extends HttpServlet {
     }
 
     public void insertarAlumno(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession sesion = request.getSession();
+        Alumno alum = new Alumno();
+        Equipo equipo = new Equipo();
+        alum.setNombre(request.getParameter("nombreAlum"));
+        alum.setGrupo(request.getParameter("grupoAlum"));
 
-        if (request.getParameter("operacion").equals("insertarAlumno")) {
-            HttpSession sesion = request.getSession();
-            
-            Alumno alum = new Alumno();
-            Equipo equipo = new Equipo();
-            
-            
-            
-            alum.setNombre(request.getParameter("nombreAlum"));
-            alum.setGrupo(request.getParameter("grupoAlum"));
-            equipo.setIdEquipo(Integer.parseInt(request.getParameter("equipoAlumno")));
-            alum.setEquipo(equipo);
-            
-            
-            
-            DAOFactory daof = DAOFactory.getDAOFactory(1);
-            IAlumnosDAO odao = daof.getAlumnosDAO();
-            
-            //traer de la sesión el arrayList para que lo lea
-            odao.insertarAlumno(alum);
-            
-            ArrayList<Alumno>alumnos = (ArrayList<Alumno>) sesion.getAttribute("alumno");
-            alumnos.add(alum);
-            sesion.setAttribute("alumno", alumnos);
-        }
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IAlumnosDAO idao = daof.getAlumnosDAO();
+        equipo.setIdEquipo(Integer.parseInt(request.getParameter("equipoAlumno")));
+        alum.setEquipo(equipo);
+
+        idao.insertarAlumno(alum);
+
+        ArrayList<Alumno> alumnos = (ArrayList<Alumno>) sesion.getAttribute("alumno");
+        alumnos.add(alum);
+        sesion.setAttribute("alumno", alumnos);
+        
+    }
+    
+    public void modificarAlumno(HttpServletRequest request, HttpServletResponse response){
+        Alumno alum = new Alumno();
+        alum.setNombre(request.getParameter("nombreAlum"));
+        alum.setGrupo(request.getParameter("grupoAlum"));
+        
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IAlumnosDAO idao = daof.getAlumnosDAO();
+        
+        idao.actualizarAlumno(alum);
     }
 
 }

@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -51,6 +52,11 @@ public class Operacion extends HttpServlet {
                     url = "JSP/insertar/equipo/insertar.jsp";
                     break;
                 case "actualizarAlumno":
+                    DAOFactory daof = DAOFactory.getDAOFactory(1);
+            IAlumnosDAO odao = daof.getAlumnosDAO();
+            ArrayList<Alumno> alumnos = odao.leerAlumnos();
+
+            request.setAttribute("alumnos", alumnos);
                     url = "JSP/actualizar/alumno/leerActualizar.jsp";
                     break;
                 case "actualizarEquipo":
@@ -93,48 +99,49 @@ public class Operacion extends HttpServlet {
     }
 
     public void obtenerDatos(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession sesion = request.getSession();
         if (request.getParameter("operacion").equals("visualizarAlumnos")) {
 
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IAlumnosDAO odao = daof.getAlumnosDAO();
             ArrayList<Alumno> alumnos = odao.leerAlumnos();
 
-            request.setAttribute("alumnos", alumnos);
+            sesion.setAttribute("alumnos", alumnos);
             
         } else if(request.getParameter("operacion").equals("visualizarEquipos")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IEquiposDAO odao = daof.getEquiposDAO();
             ArrayList<Equipo> equipos = odao.leerEquipos();
             
-            request.setAttribute("equipos", equipos);
+            sesion.setAttribute("equipos", equipos);
             
         } else if(request.getParameter("operacion").equals("visualizarAlumYEquipAsociados")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IAlumnosDAO odao = daof.getAlumnosDAO();
             ArrayList<Alumno> alumnosYEquipoAsociado = odao.leerAlumnosYEquipoAsociado();
             
-            request.setAttribute("alumnosYEquipoAsociado", alumnosYEquipoAsociado);
+            sesion.setAttribute("alumnosYEquipoAsociado", alumnosYEquipoAsociado);
             
         } else if(request.getParameter("operacion").equals("visualizarAlumYEquip")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IAlumnosDAO odao = daof.getAlumnosDAO();
             ArrayList<Alumno> alumSinEquip = odao.leerAlumnosSinEquipo();
             
-            request.setAttribute("alumSinEquip", alumSinEquip);
+            sesion.setAttribute("alumSinEquip", alumSinEquip);
             
         } else if(request.getParameter("operacion").equals("visualizarAlumSinEquip")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IEquiposDAO odao = daof.getEquiposDAO();
             ArrayList<Equipo> equiposSinAlum = odao.leerEquipos();
             
-            request.setAttribute("visualizarAlumSinEquip", equiposSinAlum);
+            sesion.setAttribute("visualizarAlumSinEquip", equiposSinAlum);
             
         } else if(request.getParameter("operacion").equals("visualizarEquipSinAlum")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IEquiposDAO odao = daof.getEquiposDAO();
             ArrayList<Equipo> equiposSinAlum = odao.leerEquipos();
             
-            request.setAttribute("visualizarEquipSinAlum", equiposSinAlum);
+            sesion.setAttribute("visualizarEquipSinAlum", equiposSinAlum);
             
         }
     }
