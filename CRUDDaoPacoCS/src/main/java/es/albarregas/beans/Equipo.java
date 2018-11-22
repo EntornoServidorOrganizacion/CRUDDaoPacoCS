@@ -6,6 +6,7 @@
 package es.albarregas.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Equipo implements Serializable{
     private int idEquipo;
     private String marca;
     private String numSerie;
+    private ArrayList<Alumno> alumnos;
 
     /**
      * @return the idEquipo
@@ -56,6 +58,20 @@ public class Equipo implements Serializable{
      */
     public void setNumSerie(String numSerie) {
         this.numSerie = numSerie;
+    }
+
+    /**
+     * @return the alumnos
+     */
+    public ArrayList<Alumno> getAlumnos() {
+        return alumnos;
+    }
+
+    /**
+     * @param alumnos the alumnos to set
+     */
+    public void setAlumnos(ArrayList<Alumno> alumnos) {
+        this.alumnos = alumnos;
     }
     
     

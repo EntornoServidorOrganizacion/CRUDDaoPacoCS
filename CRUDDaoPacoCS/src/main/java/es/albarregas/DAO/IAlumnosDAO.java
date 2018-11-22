@@ -13,11 +13,12 @@ import java.util.ArrayList;
  * @author paco
  */
 public interface IAlumnosDAO {
-    public ArrayList<Alumno> leerAlumnos();
-    public ArrayList<Alumno> leerAlumnosSinEquipo();
-    public ArrayList<Alumno> leerAlumnosYEquipoAsociado();
-    public ArrayList<Alumno> insertarAlumno();
-    public ArrayList<Alumno> actualizarAlumno();
-    public ArrayList<Alumno> eliminarAlumnos();
+    public ArrayList<Alumno> leerAlumnos();//Alumnos
+    public ArrayList<Alumno> leerAlumnosSinEquipo();//Alumnos sin equipo
+    public ArrayList<Alumno> leerAlumnosYEquipoAsociado();//Alumnos y equipos asociados
+    public void insertarAlumno(Alumno alumno);
+    public void actualizarAlumno(Alumno alumno);
+    public void eliminarAlumnos(Alumno alumno);
+    public Alumno getAlumno(int idAlumno);
     public void closeConnection();
 }

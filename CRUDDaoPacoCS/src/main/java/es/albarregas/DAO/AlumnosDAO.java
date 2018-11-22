@@ -7,6 +7,7 @@ package es.albarregas.DAO;
 
 import es.albarregas.beans.Alumno;
 import es.albarregas.beans.Equipo;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,8 +22,8 @@ public class AlumnosDAO implements IAlumnosDAO {
     @Override
     public ArrayList<Alumno> leerAlumnos() {
         ArrayList<Alumno> lista = new ArrayList();
-        String consulta = "Select * from alumnos";
-        //Esto jamás en la vida me puede devolver un resultSet 
+        String consulta = "Select * from alumnos;";
+        
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -48,8 +49,8 @@ public class AlumnosDAO implements IAlumnosDAO {
     @Override
     public ArrayList<Alumno> leerAlumnosSinEquipo() {
         ArrayList<Alumno> lista = new ArrayList();
-        String consulta = "select nombre, grupo from alumnos where idEquipo=''";
-        //Esto jamás en la vida me puede devolver un resultSet 
+        String consulta = "select nombre, grupo from alumnos where idEquipo is null;";
+        
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -74,8 +75,8 @@ public class AlumnosDAO implements IAlumnosDAO {
     @Override
     public ArrayList<Alumno> leerAlumnosYEquipoAsociado() {
         ArrayList<Alumno> lista = new ArrayList();
-        String consulta = "Select a.nombre, a.grupo, e.marca, e.idEquipo from alumnos as a inner join equipos as e using(idEquipo)";
-        //Esto jamás en la vida me puede devolver un resultSet 
+        String consulta = "Select a.nombre, a.grupo, e.marca, e.idEquipo from alumnos as a inner join equipos as e using(idEquipo);";
+        
         try {
             Statement sentencia = ConnectionFactory.getConnection().createStatement();
             ResultSet resultado = sentencia.executeQuery(consulta);
@@ -98,23 +99,72 @@ public class AlumnosDAO implements IAlumnosDAO {
     }
 
     @Override
-    public ArrayList<Alumno> insertarAlumno() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void insertarAlumno(Alumno alumno) {
+        String consulta = "insert into alumnos (nombre, grupo, idEquipo) values (?,?,?)";
+        
+        try {
+            //Statement sentencia = ConnectionFactory.getConnection().createStatement();
+            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
+            
+            
+            sentencia.setString(1, alumno.getNombre());
+            sentencia.setString(2, alumno.getGrupo());
+            sentencia.setInt(3, alumno.getEquipo().getIdEquipo());
+            
+            sentencia.executeQuery(consulta);
+            
+            sentencia.close();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
     }
 
     @Override
-    public ArrayList<Alumno> actualizarAlumno() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actualizarAlumno(Alumno alumno) {
+        String consulta = "uptade alumnos set nombre=?, grupo=?, idEquipo=? where idAlumno=?";
+        
+        try {
+            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
+            ResultSet resultado = sentencia.executeQuery(consulta);
+            
+            sentencia.setString(1, alumno.getNombre());
+            sentencia.setString(2, alumno.getGrupo());
+            sentencia.setObject(3, alumno.getEquipo());
+            
+            resultado.close();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
-    public ArrayList<Alumno> eliminarAlumnos() {
+    public void eliminarAlumnos(Alumno alumno) {
+        String consulta = "delete from alumnos where idAlumno=?";
+        
+        try {
+            PreparedStatement sentencia = (PreparedStatement) ConnectionFactory.getConnection().createStatement();
+            ResultSet resultado = sentencia.executeQuery(consulta);
+            
+            sentencia.setInt(1, alumno.getIdAlumno());
+            
+            resultado.close();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public Alumno getAlumno(int idAlumno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void closeConnection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          ConnectionFactory.closeConexion();
     }
 
     

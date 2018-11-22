@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  * Venimos desde el index.jsp y redirigimos a: - insertar.jsp - leerEliminar.jsp
  * - leerActualizar.jsp - visualizar.jsp
  */
-@WebServlet(name = "primerControlador", urlPatterns = {"/primerControlador"})
-public class primerControlador extends HttpServlet {
+@WebServlet(name = "Operacion", urlPatterns = {"/operacion"})
+public class Operacion extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -45,22 +45,22 @@ public class primerControlador extends HttpServlet {
         if (request.getParameter("operacion") != null) {
             switch (request.getParameter("operacion")) {
                 case "insertAlumno":
-                    url = "JSP/insertar/insertar.jsp";
+                    url = "JSP/insertar/alumno/insertar.jsp";
                     break;
                 case "insertEquipo":
-                    url = "JSP/insertar/insertar.jsp";
+                    url = "JSP/insertar/equipo/insertar.jsp";
                     break;
                 case "actualizarAlumno":
-                    url = "JSP/actualizar/leerActualizar.jsp";
+                    url = "JSP/actualizar/alumno/leerActualizar.jsp";
                     break;
                 case "actualizarEquipo":
-                    url = "JSP/actualizar/leerActualizar.jsp";
+                    url = "JSP/actualizar/equipo/leerActualizar.jsp";
                     break;
                 case "eliminarAlumnos":
-                    url = "JSP/eliminar/leerEliminar.jsp";
+                    url = "JSP/eliminar/alumno/leerEliminar.jsp";
                     break;
                 case "eliminarEquipos":
-                    url = "JSP/eliminar/leerEliminar.jsp";
+                    url = "JSP/eliminar/equipo/leerEliminar.jsp";
                     break;
                 case "visualizarAlumnos":
                     obtenerDatos(request, response);
@@ -100,24 +100,42 @@ public class primerControlador extends HttpServlet {
             ArrayList<Alumno> alumnos = odao.leerAlumnos();
 
             request.setAttribute("alumnos", alumnos);
+            
         } else if(request.getParameter("operacion").equals("visualizarEquipos")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IEquiposDAO odao = daof.getEquiposDAO();
             ArrayList<Equipo> equipos = odao.leerEquipos();
             
             request.setAttribute("equipos", equipos);
+            
         } else if(request.getParameter("operacion").equals("visualizarAlumYEquipAsociados")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IAlumnosDAO odao = daof.getAlumnosDAO();
             ArrayList<Alumno> alumnosYEquipoAsociado = odao.leerAlumnosYEquipoAsociado();
             
             request.setAttribute("alumnosYEquipoAsociado", alumnosYEquipoAsociado);
-        } else if(request.getParameter("operacion").equals("visualizarAlumSinEquip")){
+            
+        } else if(request.getParameter("operacion").equals("visualizarAlumYEquip")){
             DAOFactory daof = DAOFactory.getDAOFactory(1);
             IAlumnosDAO odao = daof.getAlumnosDAO();
             ArrayList<Alumno> alumSinEquip = odao.leerAlumnosSinEquipo();
             
             request.setAttribute("alumSinEquip", alumSinEquip);
+            
+        } else if(request.getParameter("operacion").equals("visualizarAlumSinEquip")){
+            DAOFactory daof = DAOFactory.getDAOFactory(1);
+            IEquiposDAO odao = daof.getEquiposDAO();
+            ArrayList<Equipo> equiposSinAlum = odao.leerEquipos();
+            
+            request.setAttribute("visualizarAlumSinEquip", equiposSinAlum);
+            
+        } else if(request.getParameter("operacion").equals("visualizarEquipSinAlum")){
+            DAOFactory daof = DAOFactory.getDAOFactory(1);
+            IEquiposDAO odao = daof.getEquiposDAO();
+            ArrayList<Equipo> equiposSinAlum = odao.leerEquipos();
+            
+            request.setAttribute("visualizarEquipSinAlum", equiposSinAlum);
+            
         }
     }
 

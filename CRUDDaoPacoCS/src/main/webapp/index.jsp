@@ -15,7 +15,7 @@
     </head>
     <body>
 
-        <form action="primerControlador" method="post">
+        <form action="operacion" method="post">
             <h1>Elija una opción</h1>
             <div class="dropdown">
                 <span>Insertar</span>
